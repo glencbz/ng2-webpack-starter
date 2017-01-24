@@ -17,6 +17,7 @@ import {
 import { ENV_PROVIDERS } from './environment';
 // App is our top level component
 import { AppComponent } from './app.component';
+import { CubeComponent } from './cube.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { XLargeDirective } from './home/x-large';
@@ -43,6 +44,7 @@ type StoreType = {
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
+    CubeComponent,
     XLargeDirective
   ],
   imports: [ // import Angular's modules

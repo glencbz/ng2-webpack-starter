@@ -1,12 +1,13 @@
-/*
- * Angular 2 decorators and services
- */
 import {
   Component,
   OnInit,
-  ViewEncapsulation
+  OnChanges,
+  SimpleChanges,
+  ViewEncapsulation,
+  Input
 } from '@angular/core';
 import { AppState } from './app.service';
+const THREE = require('three');
 
 @Component({
   selector: 'app',
@@ -15,20 +16,37 @@ import { AppState } from './app.service';
     './app.component.css'
   ],
   template: `
-<canvas></canvas>
-  `
+<canvas id="main-map" (click)="rotate()"></canvas>
+<cube [scene]="scene" [rotx]="x" [roty]="y"></cube>
+`
 })
-export class AppComponent implements OnInit {
-  public angularclassLogo = 'assets/img/angularclass-avatar.png';
-  public name = 'Angular 2 Webpack Starter';
-  public url = 'https://twitter.com/AngularClass';
-
+export class AppComponent implements OnInit{
   constructor(
     public appState: AppState
   ) {}
 
+  @Input() x = 0;
+  @Input() y = 0;
+  public scene = new THREE.Scene();
+  public renderer;
+  public camera;
+
   public ngOnInit() {
-    console.log('Initial App State', this.appState.state);
+    this.renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('main-map')});
+    this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    this.camera.position.z = 5;
+    this.render();
   }
 
+  public rotate(){
+    this.x += 0.2;
+    this.y += 0.2;
+  }
+  public render = () => {
+    requestAnimationFrame( this.render );
+    this.renderer.render( this.scene, this.camera );
+  }
 }
